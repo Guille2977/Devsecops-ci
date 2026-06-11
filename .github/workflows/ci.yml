@@ -1,0 +1,34 @@
+name: CI Node.js DevSecOps
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build-test-security:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Descargar codigo
+        uses: actions/checkout@v4
+
+      - name: Configurar Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20.x'
+
+      - name: Instalar dependencias
+        run: npm ci
+
+      - name: Validar sintaxis del codigo
+        run: npm run lint
+
+      - name: Ejecutar pruebas automaticas
+        run: npm test
+
+      - name: Analisis basico de seguridad
+        run: npm run security
